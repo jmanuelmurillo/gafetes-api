@@ -3,18 +3,6 @@ const { jsPDF } = require("jspdf");
 const { Image } = require('canvas');
 const nodeHtmlToImage = require('node-html-to-image');
 
-const getAllBadges = (req, res) => {
-	return;
-}
-
-const getOneBadge = (req, res) => {
-	return;
-}
-
-const createNewBadge = (req, res) => {
-	return;
-}
-
 const buildNewBadge = async (gafete, tokens) => {
 	var data, pdf;
 	const tokenValues = buildTokens(tokens);
@@ -162,14 +150,6 @@ const buildNewBadge = async (gafete, tokens) => {
 	return pdf.output('dataurlstring');
 }
 
-const updateOneBadge = (req, res) => {
-	return;
-}
-
-const deleteOneBadge = (req, res) => {
-	return;
-}
-
 const searchAndReplaceTokens = (str, tokenValues) => {
 	const tokenRegEx = /\$\{\w+\}/g;
 	const matches = str.match(tokenRegEx);
@@ -240,15 +220,8 @@ const loadRichText = async (content, attr) => {
 		img.onload = () => resolve(img)
 		img.src = 'data:image/png;base64,' + srcData
 	});
-
-
 }
 
 module.exports = {
-	getOneBadge,
-	getAllBadges,
-	createNewBadge,
-	buildNewBadge,
-	updateOneBadge,
-	deleteOneBadge
+	buildNewBadge
 }
