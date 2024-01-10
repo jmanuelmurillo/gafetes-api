@@ -214,8 +214,6 @@ const loadRichText = async (content, attr) => {
 			transparent: true,
 		});
 
-		console.log(srcData);
-
 		let img = new Image();
 		img.onload = () => resolve(img)
 		img.src = 'data:image/png;base64,' + srcData
