@@ -22,6 +22,7 @@ const buildNewBadge = async (req, res) => {
 }
 
 const hello = async (req, res) => {
+	console.log("enter here");
 	const { body } = req;
 
 	if(!body.data){
