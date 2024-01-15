@@ -14,7 +14,7 @@ app.get('/', (_req, res) => {
 	res.send('Hello World!');
 });
 
-app.use('/api/badges', badgeRoutes);
+app.use('/badges', badgeRoutes);
 
 app.listen(PORT, () => {
 	console.log(`Server listening on port ${PORT}`);

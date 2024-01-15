@@ -16,7 +16,18 @@ const buildNewBadge = async (req, res) => {
 	}
 }
 
+const hello = async (req, res) => {
+	const { body } = req;
+
+	if(!body.data){
+		res.status(400);
+	}
+	else{
+		res.send(body.data);
+	}
+}
 
 module.exports = {
-	buildNewBadge
+	buildNewBadge,
+	hello
 }
