@@ -6,9 +6,14 @@ const nodeHtmlToImage = require('node-html-to-image');
 const buildNewBadge = async (gafete, tokens) => {
 	var data, pdf;
 	const tokenValues = buildTokens(tokens);
+	console.log("start");
 
 	if (gafete && Array.isArray(gafete) && gafete.length > 0) {
+		console.log("is array");
+
 		for (let pdfPage of gafete) {
+			console.log("page", pdfPage);
+
 			data = JSON.parse(pdfPage.Badge_data);
 
 			const canvasData = data.canvasData;

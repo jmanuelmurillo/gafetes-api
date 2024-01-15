@@ -1,6 +1,11 @@
 const badgeService = require('../services/badgeService');
 var fs = require('fs');
 
+const root = async (req, res) => {
+	const { body } = req;
+	res.send('Hello world!');
+}
+
 const buildNewBadge = async (req, res) => {
 	const { body } = req;
 
@@ -28,6 +33,7 @@ const hello = async (req, res) => {
 }
 
 module.exports = {
+	root,
 	buildNewBadge,
 	hello
 }
