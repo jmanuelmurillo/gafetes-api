@@ -225,6 +225,102 @@ const loadRichText = async (content, attr) => {
 	});
 }
 
+const log = (gafete, tokens) => {
+	var data, pdf;
+	var log = 'init service';
+	const tokenValues = buildTokens(tokens);
+	log += " start";
+
+	if (gafete && Array.isArray(gafete) && gafete.length > 0) {
+		log += " enter if array";
+
+		for (let pdfPage of gafete) {
+			log += " enter array";
+
+			data = JSON.parse(pdfPage.Badge_data);
+
+			const canvasData = data.canvasData;
+			const imagesAdded = data.imgData;
+			const richTextAdded = data.richTextData;
+
+			/*
+			stagePreview = Konva.Node.create(canvasData);
+
+			//Load and replace text/token
+			var textNodes = stagePreview.find('Text');
+			for (const textNode of textNodes) {
+				if (textNode.name() == 'token') {
+					textNode.text(tokenValues[textNode.text()]);
+				}
+				else {
+					var str = textNode.text();
+					var strReplaced = searchAndReplaceTokens(str, tokenValues);
+					textNode.text(strReplaced);
+				}
+			}
+
+			//Load images
+			var imageNodes = stagePreview.find('Image');
+			for (const imageNode of imageNodes) {
+				var imageId = imageNode.name();
+
+				if (imageNode.name() == 'qr') {
+					var imageQR = await loadImage(tokenValues['${qr}']);
+					imageNode.image(imageQR);
+				}
+				else if (imageNode.name() == 'richText') {
+					var rtId = imageNode.getId();
+
+					if (richTextAdded[rtId]) {
+						var content = richTextAdded[rtId];
+						var contentReplaced = searchAndReplaceTokens(content, tokenValues);
+
+						var attr = {
+							width: imageNode.width() * imageNode.scaleX(),
+							height: imageNode.height() * imageNode.scaleY()
+						}
+
+						const image = await loadRichText(contentReplaced, attr);
+						imageNode.image(image);
+					}
+				}
+				else {
+					var image = await loadImage(imagesAdded[imageId]);
+					imageNode.image(image);
+				}
+			}
+
+			//Build PDF
+			var pageWidth = Number(stagePreview.width());
+			var pageHeigth = Number(stagePreview.height());
+			var ratio = 1;
+			var pageOrientation = pageWidth > pageHeigth ? 'l' : 'p';
+
+			if (!pdf) {
+				pdf = new jsPDF(pageOrientation, 'px', [pageWidth, pageHeigth]);
+			} else {
+				pdf.addPage([pageWidth, pageHeigth], pageOrientation);
+			}
+
+			// then put image on top of texts (so texts are not visible)
+			pdf.addImage(
+				stagePreview.toDataURL({ pixelRatio: 2 }),
+				'png',
+				0,
+				0,
+				pageWidth * ratio,
+				pageHeigth * ratio
+			);
+			*/
+		}
+	}
+
+	log += " finish";
+
+	return log;
+}
+
 module.exports = {
-	buildNewBadge
+	buildNewBadge,
+	log
 }

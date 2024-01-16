@@ -8,6 +8,8 @@ router
 	.post('/build', badgeController.buildNewBadge)
 
 	.post('/hello', badgeController.hello)
+	
+	.post('/log', badgeController.log)
 
 module.exports = router;
 	

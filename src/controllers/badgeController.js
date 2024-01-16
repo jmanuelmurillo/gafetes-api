@@ -21,6 +21,20 @@ const buildNewBadge = async (req, res) => {
 	}
 }
 
+const log = async (req, res) => {
+	console.log("enter log");
+
+	const { body } = req;
+
+	if(!body.badges || !body.participantTokens){
+		res.status(400);
+	}
+	else{
+		var response = badgeService.log(body.badges, body.participantTokens);
+		res.send({"response": response});
+	}
+}
+
 const hello = async (req, res) => {
 	console.log("enter here");
 	const { body } = req;
@@ -36,5 +50,6 @@ const hello = async (req, res) => {
 module.exports = {
 	root,
 	buildNewBadge,
-	hello
+	hello,
+	log
 }
