@@ -1,6 +1,7 @@
 const Konva = require('konva');
 const { jsPDF } = require("jspdf");
 const { Image } = require('canvas');
+const https = require('https');
 const nodeHtmlToImage = require('node-html-to-image');
 
 const buildNewBadge = async (gafete, tokens) => {
@@ -147,7 +148,9 @@ const buildNewBadge = async (gafete, tokens) => {
 			pageHeigth * ratio
 		);
 	}
-	return pdf.output('dataurlstring');
+	const base64Pdf = Buffer.from(pdf.output('arraybuffer')).toString('base64') ;
+	const pdfUrl = await upload2GoogleCloud(base64Pdf, "GafetesApi", "PruebasFront",  "PruebasFront");
+	return pdfUrl;
 }
 
 const searchAndReplaceTokens = (str, tokenValues) => {
@@ -219,6 +222,54 @@ const loadRichText = async (content, attr) => {
 		img.src = 'data:image/png;base64,' + srcData
 	});
 }
+
+const upload2GoogleCloud = (fileBase64, systemName, eventName, userName) => {
+	return new Promise((resolve, reject) => {
+		let data = '';
+		
+		const options = {
+			hostname: 'apigoogle.btcamericastech.com',
+			path: '/GoogleCloudUploader/UploadFile',
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			}
+		};
+		const bodyData = {
+			areaName: 2,
+			systemName: systemName,
+			eventName: eventName,
+			userIdentifier: userName,
+			cacheControl: "public, max-age=0, no-transform",
+			fileName: (new Date().getTime()).toString(36) + '-Gafete.pdf',
+			fileType: 1,
+			fileBytes: fileBase64,
+		};
+		
+		const request = https.request(options, (response) => {
+		  response.setEncoding('utf8');
+		  response.on('data', (chunk) => {
+			data += chunk;
+		  });
+	
+		  response.on('end', () => {
+			const resp = JSON.parse(data);
+			resolve(resp.fileCompleteURI);
+		  });
+		});
+	
+		// Convertimos el body en un json y se envia.
+		request.write(JSON.stringify(bodyData));
+	  
+		// Si hay errores se muestra un consoleLog
+		request.on('error', (error) => {
+			reject(error);
+		});
+	  
+		// End request
+		request.end();
+	});
+};
 
 module.exports = {
 	buildNewBadge

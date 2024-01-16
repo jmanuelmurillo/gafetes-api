@@ -8,11 +8,11 @@ const buildNewBadge = async (req, res) => {
 		res.status(400);
 	}
 	else{
-		const fileCreated = await badgeService.buildNewBadge(body.badges, body.participantTokens);
-		res.contentType("application/pdf");
+		const fileCreatedUrl = await badgeService.buildNewBadge(body.badges, body.participantTokens);
+		/*res.contentType("application/pdf");
 		var data = fileCreated.split(',')[1];
-		var buf = Buffer.from(data,'base64');
-		res.send(buf);
+		var buf = Buffer.from(data,'base64');*/
+		res.send(fileCreatedUrl);
 	}
 }
 
