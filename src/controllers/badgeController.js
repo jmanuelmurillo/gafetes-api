@@ -47,9 +47,18 @@ const hello = async (req, res) => {
 	}
 }
 
+const image = async (req, res) => {
+	console.log("enter image");
+
+	const result = await badgeService.buildImage();
+	res.send(result);
+
+}
+
 module.exports = {
 	root,
 	buildNewBadge,
 	hello,
-	log
+	log,
+	image
 }

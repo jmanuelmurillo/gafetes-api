@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const badgeController = require('../controllers/badgeController');
 
-router
-	.post('/', badgeController.root)
 
-	.post('/build', badgeController.buildNewBadge)
+router.post('/', badgeController.root);
 
-	.post('/hello', badgeController.hello)
-	
-	.post('/log', badgeController.log)
+router.post('/build', badgeController.buildNewBadge);
+
+router.post('/hello', badgeController.hello);
+
+router.post('/log', badgeController.log);
+
+router.post('/image', badgeController.image);
 
 module.exports = router;
 	
