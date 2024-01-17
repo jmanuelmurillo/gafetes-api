@@ -1,7 +1,6 @@
 const Konva = require('konva');
 const { jsPDF } = require("jspdf");
 const { Image } = require('canvas');
-const nodeHtmlToImage = require('node-html-to-image');
 const puppeteer = require('puppeteer');
 
 const buildNewBadge = async (gafete, tokens) => {
@@ -52,7 +51,7 @@ const buildNewBadge = async (gafete, tokens) => {
 							height: imageNode.height() * imageNode.scaleY()
 						}
 
-						const image = await loadRichText(contentReplaced, attr);
+						const image = await buildImageFromHTML(contentReplaced, attr);
 						imageNode.image(image);
 					}
 				}
@@ -121,7 +120,7 @@ const buildNewBadge = async (gafete, tokens) => {
 					height: imageNode.height() * imageNode.scaleY()
 				}
 
-				const image = await loadRichText(contentReplaced, attr);
+				const image = await buildImageFromHTML(contentReplaced, attr);
 				imageNode.image(image);
 			}
 		}
@@ -184,7 +183,8 @@ const loadImage = (data) => {
 	});
 }
 
-const loadRichText = async (content, attr) => {
+const buildImageFromHTML = async (content, attr) => {
+	console.log(attr);
 	const styles = `<style>
 		body{
 			font-family: Arial, sans-serif;
@@ -195,12 +195,9 @@ const loadRichText = async (content, attr) => {
 			padding: 0;
 		}
 
-		.content{ 
-			zoom: 3;
-		} 
-
 		p {
 			margin: 0;
+			paddgin: 0;
 		}
 
 		ol, ul, dl {
@@ -208,16 +205,24 @@ const loadRichText = async (content, attr) => {
 			padding: 0 20px;
 		}
 		</style>`;
+
 	return new Promise(async (resolve) => {
-		var srcData = await nodeHtmlToImage({
-			html: `<html>${styles}<body style="width:${attr.width*3}px; height: ${attr.height*3}px;"><div class="content" style="width:${attr.width}px; height: ${attr.height}px;">${content}</div></body></html>`,
-			encoding: 'base64',
-			transparent: true,
+		const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
+		const page = await browser.newPage();
+		await page.setViewport({
+			height: Math.ceil(attr.width),
+			width: Math.ceil(attr.height)
 		});
+
+		const htmlString = `<html><head>${styles}</head><body><div class="content">${content}</div></body></html>`;
+		page.setContent(htmlString);
+		const imageBuffer = await page.screenshot({});
+		const srcData = imageBuffer.toString('base64');
+
 
 		let img = new Image();
 		img.onload = () => resolve(img)
-		img.src = 'data:image/png;base64,' + srcData
+		img.src = 'data:image/png;base64,' + srcData;
 	});
 }
 
@@ -240,8 +245,8 @@ const buildImage = async () => {
 	return imageBuffer.toString('base64');
   }
 
-
 module.exports = {
 	buildNewBadge,
+	buildImageFromHTML,
 	buildImage
 }
