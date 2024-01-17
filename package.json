@@ -15,6 +15,7 @@
     "nodemon": "^3.0.2"
   },
   "dependencies": {
+    "@kibibit/kb-hologram": "^2.0.0",
     "canvas": "^2.11.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -23,7 +24,6 @@
     "konva": "^9.3.0",
     "node-base64-image": "^2.0.6",
     "node-html-to-image": "^4.0.0",
-    "puppeteer": "^21.7.0",
-    "puppeteer-core": "^21.7.0"
+    "puppeteer": "^21.7.0"
   }
 }

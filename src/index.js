@@ -8,13 +8,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({ origin: '*' }));
+
 app.use(express.json({ limit: '35MB' }));
+
+app.use('/badges', badgeRoutes);
 
 app.get('/', (_req, res) => {
 	res.send('Hello World!');
 });
 
-app.use('/api/badges', badgeRoutes);
 
 app.listen(PORT, () => {
 	console.log(`Server listening on port ${PORT}`);
