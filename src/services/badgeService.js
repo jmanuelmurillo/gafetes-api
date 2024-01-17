@@ -1,7 +1,7 @@
 const Konva = require('konva');
 const { jsPDF } = require("jspdf");
 const { Image } = require('canvas');
-const nodeHtmlToImage = require('node-html-to-image');
+//const nodeHtmlToImage = require('node-html-to-image');
 const puppeteer = require('puppeteer');
 
 const buildNewBadge = async (gafete, tokens) => {
@@ -57,8 +57,8 @@ const buildNewBadge = async (gafete, tokens) => {
 							height: imageNode.height() * imageNode.scaleY()
 						}
 
-						const image = await loadRichText(contentReplaced, attr);
-						imageNode.image(image);
+						// const image = await loadRichText(contentReplaced, attr);
+						// imageNode.image(image);
 					}
 				}
 				else {
@@ -126,8 +126,8 @@ const buildNewBadge = async (gafete, tokens) => {
 					height: imageNode.height() * imageNode.scaleY()
 				}
 
-				const image = await loadRichText(contentReplaced, attr);
-				imageNode.image(image);
+				// const image = await loadRichText(contentReplaced, attr);
+				// imageNode.image(image);
 			}
 		}
 		else {
@@ -189,42 +189,42 @@ const loadImage = (data) => {
 	});
 }
 
-const loadRichText = async (content, attr) => {
-	const styles = `<style>
-		body{
-			font-family: Arial, sans-serif;
-			font-size: 12px;
-			color: #000000;
-			line-height: 1.2;
-			margin: 0;
-			padding: 0;
-		}
+// const loadRichText = async (content, attr) => {
+// 	const styles = `<style>
+// 		body{
+// 			font-family: Arial, sans-serif;
+// 			font-size: 12px;
+// 			color: #000000;
+// 			line-height: 1.2;
+// 			margin: 0;
+// 			padding: 0;
+// 		}
 
-		.content{ 
-			zoom: 3;
-		} 
+// 		.content{ 
+// 			zoom: 3;
+// 		} 
 
-		p {
-			margin: 0;
-		}
+// 		p {
+// 			margin: 0;
+// 		}
 
-		ol, ul, dl {
-			margin-right: 0px;
-			padding: 0 20px;
-		}
-		</style>`;
-	return new Promise(async (resolve) => {
-		var srcData = await nodeHtmlToImage({
-			html: `<html>${styles}<body style="width:${attr.width * 3}px; height: ${attr.height * 3}px;"><div class="content" style="width:${attr.width}px; height: ${attr.height}px;">${content}</div></body></html>`,
-			encoding: 'base64',
-			transparent: true,
-		});
+// 		ol, ul, dl {
+// 			margin-right: 0px;
+// 			padding: 0 20px;
+// 		}
+// 		</style>`;
+// 	return new Promise(async (resolve) => {
+// 		var srcData = await nodeHtmlToImage({
+// 			html: `<html>${styles}<body style="width:${attr.width * 3}px; height: ${attr.height * 3}px;"><div class="content" style="width:${attr.width}px; height: ${attr.height}px;">${content}</div></body></html>`,
+// 			encoding: 'base64',
+// 			transparent: true,
+// 		});
 
-		let img = new Image();
-		img.onload = () => resolve(img)
-		img.src = 'data:image/png;base64,' + srcData
-	});
-}
+// 		let img = new Image();
+// 		img.onload = () => resolve(img)
+// 		img.src = 'data:image/png;base64,' + srcData
+// 	});
+// }
 
 const log = (gafete, tokens) => {
 	var data, pdf;
