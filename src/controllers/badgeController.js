@@ -2,11 +2,13 @@ const badgeService = require('../services/badgeService');
 var fs = require('fs');
 
 const root = async (req, res) => {
+	console.log("enter root");
 	const { body } = req;
 	res.send('Hello world!');
 }
 
 const buildNewBadge = async (req, res) => {
+	console.log("enter buildNewBadge");
 	const { body } = req;
 
 	if(!body.badges || !body.participantTokens){
