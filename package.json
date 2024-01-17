@@ -7,7 +7,7 @@
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\"",
-	"loadchrome": "cd ./node_modules/puppeteer && npm install"
+    "loadchrome": "cd ./node_modules/puppeteer && npm install"
   },
   "keywords": [],
   "author": "",
