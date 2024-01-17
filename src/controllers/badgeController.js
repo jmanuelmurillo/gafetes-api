@@ -13,6 +13,7 @@ const buildNewBadge = async (req, res) => {
 
 	if(!body.badges || !body.participantTokens){
 		res.status(400);
+		res.send({"error": "No data entered"})
 	}
 	else{
 		const fileCreated = await badgeService.buildNewBadge(body.badges, body.participantTokens);
@@ -30,6 +31,7 @@ const log = async (req, res) => {
 
 	if(!body.badges || !body.participantTokens){
 		res.status(400);
+		res.send({"error": "No data entered"});
 	}
 	else{
 		var response = badgeService.log(body.badges, body.participantTokens);
@@ -43,6 +45,7 @@ const hello = async (req, res) => {
 
 	if(!body.data){
 		res.status(400);
+		res.send({"error": "No data entered"});
 	}
 	else{
 		res.send(body.data);
