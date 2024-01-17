@@ -24,6 +24,7 @@
     "jspdf": "^2.5.1",
     "konva": "^9.3.0",
     "node-base64-image": "^2.0.6",
-    "puppeteer": "^21.0.1"
+	"puppeteer": "latest",
+	"puppeteer-core": "latest"
   }
 }
