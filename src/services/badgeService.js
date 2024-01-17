@@ -215,7 +215,7 @@ const loadRichText = async (content, attr) => {
 		</style>`;
 	return new Promise(async (resolve) => {
 		var srcData = await nodeHtmlToImage({
-			html: `<html>${styles}<body style="width:${attr.width*3}px; height: ${attr.height*3}px;"><div class="content" style="width:${attr.width}px; height: ${attr.height}px;">${content}</div></body></html>`,
+			html: `<html>${styles}<body style="width:${attr.width * 3}px; height: ${attr.height * 3}px;"><div class="content" style="width:${attr.width}px; height: ${attr.height}px;">${content}</div></body></html>`,
 			encoding: 'base64',
 			transparent: true,
 		});
@@ -323,22 +323,22 @@ const log = (gafete, tokens) => {
 
 const buildImage = async () => {
 
-	const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox']});
+	const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
 	const page = await browser.newPage();
 	await page.setViewport({
-	  height: 500,
-	  width: 500
+		height: 500,
+		width: 500
 	});
 
 	const htmlString = `<html><body style="font-size: 16px; font-family: sans-serif; color: red;"><div class="content" style="text-aling: center;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tellus nisi, aliquam eu odio sodales, tincidunt maximus ex. Quisque ac nisi ipsum. Nulla eleifend sed nunc eget consequat. In volutpat leo magna, et rutrum augue imperdiet quis. Aenean laoreet lorem ac justo tempus condimentum. Proin faucibus tortor id sem convallis, interdum commodo risus accumsan. Etiam cursus posuere diam, et rhoncus metus aliquet sit amet. Pellentesque et mi in nisl sagittis efficitur volutpat et metus. Sed leo sem, mattis suscipit condimentum id, tristique non tellus.</div></body></html>`;
 
 	//if your HTML is in memory (as a string), you load it like this:
 	page.setContent(htmlString);
-  
-	const imageBuffer = await page.screenshot({});  
+
+	const imageBuffer = await page.screenshot({});
 	// convert to base64 string if you want to:
 	return imageBuffer.toString('base64');
-  }
+}
 
 module.exports = {
 	buildNewBadge,

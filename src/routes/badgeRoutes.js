@@ -14,4 +14,3 @@ router.post('/log', badgeController.log);
 router.post('/image', badgeController.image);
 
 module.exports = router;
-	

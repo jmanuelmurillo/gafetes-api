@@ -11,15 +11,15 @@ const buildNewBadge = async (req, res) => {
 	console.log("enter buildNewBadge");
 	const { body } = req;
 
-	if(!body.badges || !body.participantTokens){
+	if (!body.badges || !body.participantTokens) {
 		res.status(400);
-		res.send({"error": "No data entered"})
+		res.send({ "error": "No data entered" })
 	}
-	else{
+	else {
 		const fileCreated = await badgeService.buildNewBadge(body.badges, body.participantTokens);
 		res.contentType("application/pdf");
 		var data = fileCreated.split(',')[1];
-		var buf = Buffer.from(data,'base64');
+		var buf = Buffer.from(data, 'base64');
 		res.send(buf);
 	}
 }
@@ -29,13 +29,13 @@ const log = async (req, res) => {
 
 	const { body } = req;
 
-	if(!body.badges || !body.participantTokens){
+	if (!body.badges || !body.participantTokens) {
 		res.status(400);
-		res.send({"error": "No data entered"});
+		res.send({ "error": "No data entered" });
 	}
-	else{
+	else {
 		var response = badgeService.log(body.badges, body.participantTokens);
-		res.send({"response": response});
+		res.send({ "response": response });
 	}
 }
 
@@ -43,11 +43,11 @@ const hello = async (req, res) => {
 	console.log("enter here");
 	const { body } = req;
 
-	if(!body.data){
+	if (!body.data) {
 		res.status(400);
-		res.send({"error": "No data entered"});
+		res.send({ "error": "No data entered" });
 	}
-	else{
+	else {
 		res.send(body.data);
 	}
 }
