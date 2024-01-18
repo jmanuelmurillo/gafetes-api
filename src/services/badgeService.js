@@ -187,7 +187,6 @@ const loadImage = (data) => {
 }
 
 const buildImageFromHTML = async (content, attr) => {
-	console.log(attr);
 	const styles = `<style>
 		body{
 			font-family: Arial, sans-serif;
