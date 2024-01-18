@@ -3,8 +3,6 @@ var fs = require('fs');
 
 const root = async (req, res) => {
 	console.log("enter root");
-
-	const { body } = req;
 	res.send('Hello world!');
 }
 
@@ -26,29 +24,20 @@ const buildNewBadge = async (req, res) => {
 }
 
 const hello = async (req, res) => {
-	console.log("enter here");
+	console.log("enter hello");
 	const { body } = req;
 
-	if (!body.data) {
+	if (!body) {
 		res.status(400);
 		res.send("No data entered");
 	}
 	else {
-		res.send(body.data);
+		res.send(body);
 	}
-}
-
-const image = async (req, res) => {
-	console.log("enter image");
-
-	const result = await badgeService.buildImage();
-	res.send(result);
-
 }
 
 module.exports = {
 	root,
 	buildNewBadge,
-	hello,
-	image
+	hello
 }

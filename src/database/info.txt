@@ -1,0 +1,1 @@
+apt-get update -yy && apt-get install -yy libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev libasound2 && npm run loadchrome && npm run start
