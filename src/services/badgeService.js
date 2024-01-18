@@ -1,6 +1,7 @@
 const Konva = require('konva');
 const { jsPDF } = require("jspdf");
 const { Image } = require('canvas');
+const https = require('https');
 const puppeteer = require('puppeteer');
 
 const buildNewBadge = async (gafete, tokens) => {
@@ -147,7 +148,9 @@ const buildNewBadge = async (gafete, tokens) => {
 			pageHeigth * ratio
 		);
 	}
-	return pdf.output('dataurlstring');
+	const base64Pdf = Buffer.from(pdf.output('arraybuffer')).toString('base64');
+	const pdfUrl = await upload2GoogleCloud(base64Pdf, "GafetesApi", "PruebasFront", "PruebasFront");
+	return pdfUrl;
 }
 
 const searchAndReplaceTokens = (str, tokenValues) => {
@@ -226,24 +229,73 @@ const buildImageFromHTML = async (content, attr) => {
 	});
 }
 
+const upload2GoogleCloud = (fileBase64, systemName, eventName, userName) => {
+	return new Promise((resolve, reject) => {
+		let data = '';
+
+		const options = {
+			hostname: 'apigoogle.btcamericastech.com',
+			path: '/GoogleCloudUploader/UploadFile',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		};
+		const bodyData = {
+			areaName: 2,
+			systemName: systemName,
+			eventName: eventName,
+			userIdentifier: userName,
+			cacheControl: "public, max-age=0, no-transform",
+			fileName: (new Date().getTime()).toString(36) + '-Gafete.pdf',
+			fileType: 1,
+			fileBytes: fileBase64,
+		};
+
+		const request = https.request(options, (response) => {
+			response.setEncoding('utf8');
+			response.on('data', (chunk) => {
+				data += chunk;
+			});
+
+			response.on('end', () => {
+				const resp = JSON.parse(data);
+				resolve(resp.fileCompleteURI);
+			});
+		});
+
+		// Convertimos el body en un json y se envia.
+		request.write(JSON.stringify(bodyData));
+
+		// Si hay errores se muestra un consoleLog
+		request.on('error', (error) => {
+			reject(error);
+		});
+
+		// End request
+		request.end();
+	});
+};
+
+
 const buildImage = async () => {
 
-	const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox']});
+	const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
 	const page = await browser.newPage();
 	await page.setViewport({
-	  height: 500,
-	  width: 500
+		height: 500,
+		width: 500
 	});
 
 	const htmlString = `<html><body style="font-size: 16px; font-family: sans-serif; color: red;"><div class="content" style="text-aling: center;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tellus nisi, aliquam eu odio sodales, tincidunt maximus ex. Quisque ac nisi ipsum. Nulla eleifend sed nunc eget consequat. In volutpat leo magna, et rutrum augue imperdiet quis. Aenean laoreet lorem ac justo tempus condimentum. Proin faucibus tortor id sem convallis, interdum commodo risus accumsan. Etiam cursus posuere diam, et rhoncus metus aliquet sit amet. Pellentesque et mi in nisl sagittis efficitur volutpat et metus. Sed leo sem, mattis suscipit condimentum id, tristique non tellus.</div></body></html>`;
 
 	//if your HTML is in memory (as a string), you load it like this:
 	page.setContent(htmlString);
-  
-	const imageBuffer = await page.screenshot({});  
+
+	const imageBuffer = await page.screenshot({});
 	// convert to base64 string if you want to:
 	return imageBuffer.toString('base64');
-  }
+}
 
 module.exports = {
 	buildNewBadge,
