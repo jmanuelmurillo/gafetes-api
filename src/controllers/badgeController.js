@@ -13,10 +13,10 @@ const buildNewBadge = async (req, res) => {
 
 	const { body } = req;
 
-	if(!body.badges || !body.participantTokens){
+	if (!body.badges || !body.participantTokens) {
 		res.status(400);
 	}
-	else{
+	else {
 		const fileCreatedUrl = await badgeService.buildNewBadge(body.badges, body.participantTokens);
 		/*res.contentType("application/pdf");
 		var data = fileCreated.split(',')[1];
@@ -29,11 +29,11 @@ const hello = async (req, res) => {
 	console.log("enter here");
 	const { body } = req;
 
-	if(!body.data){
+	if (!body.data) {
 		res.status(400);
 		res.send("No data entered");
 	}
-	else{
+	else {
 		res.send(body.data);
 	}
 }

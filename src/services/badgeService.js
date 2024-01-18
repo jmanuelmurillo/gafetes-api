@@ -278,7 +278,6 @@ const upload2GoogleCloud = (fileBase64, systemName, eventName, userName) => {
 
 
 const buildImage = async () => {
-
 	const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
 	const page = await browser.newPage();
 	await page.setViewport({
