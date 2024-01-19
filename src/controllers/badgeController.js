@@ -13,13 +13,11 @@ const buildNewBadge = async (req, res) => {
 
 	if (!body.badges || !body.participantTokens) {
 		res.status(400);
+		res.send({"error": "404 Bad request"})
 	}
 	else {
-		const fileCreatedUrl = await badgeService.buildNewBadge(body.badges, body.participantTokens);
-		/*res.contentType("application/pdf");
-		var data = fileCreated.split(',')[1];
-		var buf = Buffer.from(data,'base64');*/
-		res.send(fileCreatedUrl);
+		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens);
+		res.send(result);
 	}
 }
 
