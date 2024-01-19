@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer');
 
 const buildNewBadge = async (gafete, tokens) => {
 	var data, pdf;
-	const tokenValues = tokens;
+	const tokenValues = buildTokens(tokens);
 
 	if (gafete && Array.isArray(gafete) && gafete.length > 0) {
 		for (let pdfPage of gafete) {
