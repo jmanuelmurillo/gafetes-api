@@ -6,8 +6,6 @@ router.get('/', badgeController.root);
 
 router.post('/', badgeController.root);
 
-router.post('/hello', badgeController.hello);
-
 router.post('/build', badgeController.buildNewBadge);
 
 module.exports = router;

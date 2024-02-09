@@ -4,13 +4,24 @@ const { Image } = require('canvas');
 const https = require('https');
 const puppeteer = require('puppeteer');
 
-const buildNewBadge = async (gafete, tokens) => {
+const buildNewBadge = async (gafete, tokens, upload) => {
 	var data, pdf;
 	const tokenValues = buildTokens(tokens);
 
 	if (gafete && Array.isArray(gafete) && gafete.length > 0) {
 		for (let pdfPage of gafete) {
-			data = JSON.parse(pdfPage.badge_data);
+			if (pdfPage.hasOwnProperty('badge_data')) {
+				data = JSON.parse(pdfPage.badge_data);
+			}
+			else if (pdfPage.hasOwnProperty('Badge_data')) {
+				data = JSON.parse(pdfPage.Badge_data);
+			}
+			else {
+				return {
+					"status": "error",
+					"message": "There is no badges data"
+				}
+			}
 
 			const canvasData = data.canvasData;
 			const imagesAdded = data.imgData;
@@ -90,12 +101,24 @@ const buildNewBadge = async (gafete, tokens) => {
 			"message": "There is no badges data"
 		}
 	}
-	const base64Pdf = Buffer.from(pdf.output('arraybuffer')).toString('base64');
-	const pdfUrl = await upload2GoogleCloud(base64Pdf, "GafetesApi", "PruebasFront", "PruebasFront");
-	return {
-		"status": "success",
-		"url": pdfUrl
-	};
+
+	if (upload) {
+		console.log('upload');
+		const base64Pdf = Buffer.from(pdf.output('arraybuffer')).toString('base64');
+		const pdfUrl = await upload2GoogleCloud(base64Pdf, "GafetesApi", "PruebasFront", "PruebasFront");
+		return {
+			"status": "success",
+			"url": pdfUrl
+		};
+	}
+	else {
+		console.log('generate-file');
+		var base64Pdf = pdf.output('dataurlstring');
+		return {
+			"status": "success",
+			"file": base64Pdf
+		};
+	}
 }
 
 const searchAndReplaceTokens = (str, tokenValues) => {
@@ -115,7 +138,7 @@ const searchAndReplaceTokens = (str, tokenValues) => {
 
 const buildTokens = (arr) => {
 	var tokens = {};
-
+	
 	for (const token of arr) {
 		tokens[token.key] = token.value ? token.value : " ";
 	}

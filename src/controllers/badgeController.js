@@ -16,26 +16,16 @@ const buildNewBadge = async (req, res) => {
 		res.send({"error": "404 Bad request"})
 	}
 	else {
-		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens);
+		const upload = body.upload && body.upload == true;
+		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload);
+		if(!upload){
+			res.contentType("application/pdf");
+		}
 		res.send(result);
-	}
-}
-
-const hello = async (req, res) => {
-	console.log("enter hello");
-	const { body } = req;
-
-	if (!body) {
-		res.status(400);
-		res.send("No data entered");
-	}
-	else {
-		res.send(body);
 	}
 }
 
 module.exports = {
 	root,
-	buildNewBadge,
-	hello
+	buildNewBadge
 }
