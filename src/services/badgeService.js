@@ -4,7 +4,7 @@ const { Image } = require('canvas');
 const https = require('https');
 const puppeteer = require('puppeteer');
 
-const buildNewBadge = async (gafete, tokens, upload) => {
+const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) => {
 	var data, pdf;
 	const tokenValues = buildTokens(tokens);
 
@@ -103,16 +103,14 @@ const buildNewBadge = async (gafete, tokens, upload) => {
 	}
 
 	if (upload) {
-		console.log('upload');
 		const base64Pdf = Buffer.from(pdf.output('arraybuffer')).toString('base64');
-		const pdfUrl = await upload2GoogleCloud(base64Pdf, "GafetesApi", "PruebasFront", "PruebasFront");
+		const pdfUrl = await upload2GoogleCloud(base64Pdf, eventName, userIdentifier);
 		return {
 			"status": "success",
 			"url": pdfUrl
 		};
 	}
 	else {
-		console.log('generate-file');
 		var base64Pdf = pdf.output('dataurlstring');
 		return {
 			"status": "success",
@@ -196,7 +194,7 @@ const buildImageFromHTML = async (content, attr) => {
 	});
 }
 
-const upload2GoogleCloud = (fileBase64, systemName, eventName, userName) => {
+const upload2GoogleCloud = (fileBase64, eventName, userIdentifier) => {
 	return new Promise((resolve, reject) => {
 		let data = '';
 
@@ -209,14 +207,14 @@ const upload2GoogleCloud = (fileBase64, systemName, eventName, userName) => {
 			}
 		};
 		const bodyData = {
-			areaName: 2,
-			systemName: systemName,
+			areaName: 1,
+			systemName: 'badges',
 			eventName: eventName,
-			userIdentifier: userName,
+			userIdentifier: userIdentifier,
 			cacheControl: "public, max-age=0, no-transform",
 			fileName: (new Date().getTime()).toString(36) + '-Gafete.pdf',
 			fileType: 1,
-			fileBytes: fileBase64,
+			fileBytes: fileBase64
 		};
 
 		const request = https.request(options, (response) => {

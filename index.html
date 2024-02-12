@@ -112,7 +112,9 @@
 		var _data = {
 			"badges": _badges,
 			"participantTokens": _tokens,
-			"upload": true
+			"upload": true,
+			"eventName": "front",
+			"userIdentifier": "prod"
 		}
 
 		$.ajax({
@@ -128,7 +130,6 @@
 						const r = await fetch(response.file);
 						const blob = await r.blob();
 						const url = URL.createObjectURL(blob);
-						console.log(url);
 						$('#file').attr('src', url);
 					}
 					else{
