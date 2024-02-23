@@ -134,13 +134,33 @@ const searchAndReplaceTokens = (str, tokenValues) => {
 	return str;
 }
 
+const normalizeJSON = (jsonObj) => {
+	if (typeof jsonObj === 'object') {
+		if (Array.isArray(jsonObj)) {
+			return jsonObj.map(elemento => normalizeJSON(elemento));
+		} else {
+			const newObj = {};
+			for (const clave in jsonObj) {
+				if (jsonObj.hasOwnProperty(clave)) {
+					const newKey = clave.toLowerCase();
+					const newValue = normalizeJSON(jsonObj[clave]);
+					newObj[newKey] = newValue;
+				}
+			}
+			return newObj;
+		}
+	} else {
+		return jsonObj;
+	}
+}
+
 const buildTokens = (arr) => {
 	var tokens = {};
-	
-	for (const token of arr) {
+	var newArr = normalizeJSON(arr);
+
+	for (const token of newArr) {
 		tokens[token.key] = token.value ? token.value : " ";
 	}
-
 	return tokens;
 }
 
