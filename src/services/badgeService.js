@@ -215,7 +215,7 @@ const buildImageFromHTML = async (content, attr) => {
 }
 
 const upload2GoogleCloud = (fileBase64, eventName, userIdentifier) => {
-	const cloudApiKey = process.env.CloudApiKey || 'VW1HWEx0K2lBUUVUZG96UzhUVkJiOFREYWs3Sm1Kamk4OVRLOWw2TkMwND0=';
+	const cloudApiKey = 'VW1HWEx0K2lBUUVUZG96UzhUVkJiOFREYWs3Sm1Kamk4OVRLOWw2TkMwND0=';
 
 	return new Promise((resolve, reject) => {
 		let data = '';
