@@ -224,6 +224,7 @@ const upload2GoogleCloud = (fileBase64, eventName, userIdentifier) => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				'CloudApiKey': 'VW1HWEx0K2lBUUVUZG96UzhUVkJiOFREYWs3Sm1Kamk4OVRLOWw2TkMwND0='
 			}
 		};
 		const bodyData = {
