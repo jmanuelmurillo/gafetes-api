@@ -5,7 +5,7 @@ const cors = require('cors');
 const badgeRoutes = require('./routes/badgeRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 443;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors({ origin: '*' }));
 
