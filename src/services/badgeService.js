@@ -65,7 +65,8 @@ const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) 
                         try {
                             const image = await buildImageFromHTML(contentReplaced, attr);
                             imageNode.image(image);
-                        } catch (error) {
+                        }
+						catch (error) {
                             console.error('Error building image from HTML:', error);
                             return {
                                 "status": "error",
@@ -88,7 +89,8 @@ const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) 
 
 			if (!pdf) {
 				pdf = new jsPDF(pageOrientation, 'px', [pageWidth, pageHeigth]);
-			} else {
+			} 
+			else {
 				pdf.addPage([pageWidth, pageHeigth], pageOrientation);
 			}
 
@@ -203,17 +205,18 @@ const buildImageFromHTML = async (content, attr) => {
 
 	return new Promise(async (resolve) => {
 		try {
-            const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
+            const browser = await puppeteer.launch({ headless: 'shell', args: ['--no-sandbox'] });
             const page = await browser.newPage();
             await page.setViewport({
                 height: Math.ceil(attr.width),
-                width: Math.ceil(attr.height)
+                width: Math.ceil(attr.height),
+				deviceScaleFactor: 2
             });
 
             const htmlString = `<html><head>${styles}</head><body><div class="content">${content}</div></body></html>`;
             await page.setContent(htmlString);
 			
-            const imageBuffer = await page.screenshot({ encoding: "base64" });
+            const imageBuffer = await page.screenshot({ encoding: 'base64', omitBackground: true });
             const srcData = imageBuffer.toString('base64');
             const base64Image = `data:image/png;base64,${srcData}`;
 			
@@ -226,7 +229,10 @@ const buildImageFromHTML = async (content, attr) => {
                 reject(error);
             };
             imag.src = base64Image;
-        } catch (error) {
+			await browser.close();
+
+        }
+		catch (error) {
             console.error('Error in buildImageFromHTML:', error);
             reject(error);
         }
