@@ -22,11 +22,10 @@ const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) 
 					"message": "There is no badges data"
 				}
 			}
-
-			const canvasData = data.canvasData;
+			const canvasData = removeQuotesFromDimensions(data.canvasData);
 			const imagesAdded = data.imgData;
 			const richTextAdded = data.richTextData;
-
+			
 			stagePreview = Konva.Node.create(canvasData);
 
 			//Load and replace text/token
@@ -63,8 +62,17 @@ const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) 
 							height: imageNode.height() * imageNode.scaleY()
 						}
 
-						const image = await buildImageFromHTML(contentReplaced, attr);
-						imageNode.image(image);
+                        try {
+                            const image = await buildImageFromHTML(contentReplaced, attr);
+                            imageNode.image(image);
+                        }
+						catch (error) {
+                            console.error('Error building image from HTML:', error);
+                            return {
+                                "status": "error",
+                                "message": "Error building image from HTML"
+                            };
+                        }
 					}
 				}
 				else {
@@ -81,7 +89,8 @@ const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) 
 
 			if (!pdf) {
 				pdf = new jsPDF(pageOrientation, 'px', [pageWidth, pageHeigth]);
-			} else {
+			} 
+			else {
 				pdf.addPage([pageWidth, pageHeigth], pageOrientation);
 			}
 
@@ -195,22 +204,38 @@ const buildImageFromHTML = async (content, attr) => {
 		</style>`;
 
 	return new Promise(async (resolve) => {
-		const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
-		const page = await browser.newPage();
-		await page.setViewport({
-			height: Math.ceil(attr.width),
-			width: Math.ceil(attr.height)
-		});
+		try {
+            const browser = await puppeteer.launch({ headless: 'shell', args: ['--no-sandbox'] });
+            const page = await browser.newPage();
+            await page.setViewport({
+                height: Math.ceil(attr.width),
+                width: Math.ceil(attr.height),
+				deviceScaleFactor: 2
+            });
 
-		const htmlString = `<html><head>${styles}</head><body><div class="content">${content}</div></body></html>`;
-		page.setContent(htmlString);
-		const imageBuffer = await page.screenshot({});
-		const srcData = imageBuffer.toString('base64');
+            const htmlString = `<html><head>${styles}</head><body><div class="content">${content}</div></body></html>`;
+            await page.setContent(htmlString);
+			
+            const imageBuffer = await page.screenshot({ encoding: 'base64', omitBackground: true });
+            const srcData = imageBuffer.toString('base64');
+            const base64Image = `data:image/png;base64,${srcData}`;
+			
+            let imag = new Image();
+            imag.onload = () => {
+                resolve(imag);
+            };
+            imag.onerror = (error) => {
+                console.error('Error loading image:', error);
+                reject(error);
+            };
+            imag.src = base64Image;
+			await browser.close();
 
-
-		let img = new Image();
-		img.onload = () => resolve(img)
-		img.src = 'data:image/png;base64,' + srcData;
+        }
+		catch (error) {
+            console.error('Error in buildImageFromHTML:', error);
+            reject(error);
+        }
 	});
 }
 
@@ -263,6 +288,11 @@ const upload2GoogleCloud = (fileBase64, eventName, userIdentifier) => {
 		// End request
 		request.end();
 	});
+};
+
+const removeQuotesFromDimensions = (jsonString) => {
+    return jsonString.replace(/"width":"(\d+(\.\d+)?)"/g, '"width":$1')
+                     .replace(/"height":"(\d+(\.\d+)?)"/g, '"height":$1');
 };
 
 module.exports = {
