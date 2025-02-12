@@ -58,8 +58,8 @@ const buildNewBadge = async (gafete, tokens, upload, eventId, participantId, env
 						var contentReplaced = searchAndReplaceTokens(content, tokenValues);
 
 						var attr = {
-							width: imageNode.width() * imageNode.scaleX(),
-							height: imageNode.height() * imageNode.scaleY()
+							width: imageNode.width() * imageNode.scaleY(),
+							height: imageNode.height() * imageNode.scaleX()
 						}
 
                         try {
@@ -201,11 +201,15 @@ const buildImageFromHTML = async (content, attr) => {
 			margin-right: 0px;
 			padding: 0 20px;
 		}
+
+		.content{
+			overflow: hidden;
+		}
 		</style>`;
 
 	return new Promise(async (resolve) => {
 		try {
-            const browser = await puppeteer.launch({ headless: 'shell', args: ['--no-sandbox'] });
+            const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
             const page = await browser.newPage();
             await page.setViewport({
                 height: Math.ceil(attr.width),
@@ -216,7 +220,7 @@ const buildImageFromHTML = async (content, attr) => {
             const htmlString = `<html><head>${styles}</head><body><div class="content">${content}</div></body></html>`;
             await page.setContent(htmlString);
 			
-            const imageBuffer = await page.screenshot({ encoding: 'base64', omitBackground: true });
+            const imageBuffer = await page.screenshot({ encoding: 'base64', omitBackground: true, captureBeyondViewport: false });
             const srcData = imageBuffer.toString('base64');
             const base64Image = `data:image/png;base64,${srcData}`;
 			
@@ -241,12 +245,10 @@ const buildImageFromHTML = async (content, attr) => {
 
 const upload2GoogleCloud = (fileBase64, eventId, participantId, environment) => {
 	const CLOUDAPIKEY = process.env.CloudApiKey || '';
-	console.log(CLOUDAPIKEY)
 
 	return new Promise((resolve, reject) => {
 		let data = '';
 		var filename = eventId + '-' + participantId + '-' + (new Date().getTime()).toString(36) + '.pdf';
-		console.log(filename);
 
 		const options = {
 			hostname: 'apigoogle.btcamericastech.com',

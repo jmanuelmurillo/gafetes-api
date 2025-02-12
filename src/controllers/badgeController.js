@@ -7,7 +7,7 @@ const root = async (req, res) => {
 }
 
 const buildNewBadge = async (req, res) => {
-	console.log("enter buildNewBadge");
+	console.log("enter build badge");
 
 	const { body } = req;
 
@@ -28,6 +28,7 @@ const buildNewBadge = async (req, res) => {
 		}
 		res.send(result);
 	}
+	console.log("finish build badge");
 }
 
 module.exports = {
