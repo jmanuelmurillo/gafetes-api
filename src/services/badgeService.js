@@ -4,7 +4,7 @@ const { Image } = require('canvas');
 const https = require('https');
 const puppeteer = require('puppeteer');
 
-const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) => {
+const buildNewBadge = async (gafete, tokens, upload, eventId, participantId, environment) => {
 	var data, pdf;
 	const tokenValues = buildTokens(tokens);
 
@@ -113,7 +113,7 @@ const buildNewBadge = async (gafete, tokens, upload, eventName, userIdentifier) 
 
 	if (upload) {
 		const base64Pdf = Buffer.from(pdf.output('arraybuffer')).toString('base64');
-		const pdfUrl = await upload2GoogleCloud(base64Pdf, eventName, userIdentifier);
+		const pdfUrl = await upload2GoogleCloud(base64Pdf, eventId, participantId, environment);
 		return {
 			"status": "success",
 			"url": pdfUrl
@@ -239,11 +239,14 @@ const buildImageFromHTML = async (content, attr) => {
 	});
 }
 
-const upload2GoogleCloud = (fileBase64, eventName, userIdentifier) => {
-	const cloudApiKey = 'VW1HWEx0K2lBUUVUZG96UzhUVkJiOFREYWs3Sm1Kamk4OVRLOWw2TkMwND0=';
+const upload2GoogleCloud = (fileBase64, eventId, participantId, environment) => {
+	const CLOUDAPIKEY = process.env.CloudApiKey || '';
+	console.log(CLOUDAPIKEY)
 
 	return new Promise((resolve, reject) => {
 		let data = '';
+		var filename = eventId + '-' + participantId + '-' + (new Date().getTime()).toString(36) + '.pdf';
+		console.log(filename);
 
 		const options = {
 			hostname: 'apigoogle.btcamericastech.com',
@@ -251,16 +254,16 @@ const upload2GoogleCloud = (fileBase64, eventName, userIdentifier) => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'CloudApiKey': cloudApiKey
+				'CloudApiKey': CLOUDAPIKEY
 			}
 		};
 		const bodyData = {
 			areaName: 1,
 			systemName: 'badges',
-			eventName: eventName,
-			userIdentifier: userIdentifier,
+			eventName: environment,
+			userIdentifier: eventId,
 			cacheControl: "public, max-age=0, no-transform",
-			fileName: (new Date().getTime()).toString(36) + '-Gafete.pdf',
+			fileName: filename,
 			fileType: 1,
 			fileBytes: fileBase64
 		};

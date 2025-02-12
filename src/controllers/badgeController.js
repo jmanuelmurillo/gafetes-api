@@ -17,10 +17,11 @@ const buildNewBadge = async (req, res) => {
 	}
 	else {
 		const upload = body.upload && body.upload == true;
-		const eventName = (body.eventName && body.eventName != '') ? body.eventName : 'defaultEvent';
-		const userIdentifier = (body.userIdentifier && body.userIdentifier != '') ? body.userIdentifier : 'stage';
+		const eventId = (body.eventId && body.eventId != '') ? body.eventId : '0';
+		const participantId = (body.participantId && body.participantId != '') ? body.participantId : '0';
+		const environment = (body.environment && body.environment != '') ? body.environment : 'Stage';
 
-		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload, eventName, userIdentifier);
+		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload, eventId, participantId, environment);
 		
 		if(!upload){
 			res.contentType("application/pdf");
