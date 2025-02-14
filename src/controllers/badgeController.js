@@ -22,10 +22,10 @@ const buildNewBadge = async (req, res) => {
 		const environment = (body.environment && body.environment != '') ? body.environment : 'Stage';
 
 		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload, eventId, participantId, environment);
-		
-		if(!upload){
-			res.contentType("application/pdf");
-		}
+
+		res.setHeader('Content-Type', 'application/json');
+		res.setHeader('Access-Control-Allow-Origin', '*');
+		res.setHeader('Access-Control-Allow-Methods', '*');
 		res.send(result);
 	}
 	console.log("finish build badge");
