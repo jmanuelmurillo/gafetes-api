@@ -2,33 +2,42 @@ const badgeService = require('../services/badgeService');
 var fs = require('fs');
 
 const root = async (req, res) => {
-	console.log("enter root");
-	res.send('Hello world!');
+    try {
+        console.log("enter root");
+        res.send('Hello world!');
+    } catch (error) {
+        console.error('Error in root:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
 }
 
 const buildNewBadge = async (req, res) => {
-	console.log("enter build badge");
+    try {
+        console.log('\x1b[34m%s\x1b[0m', '=> Start build badge');
 
-	const { body } = req;
+        const { body } = req;
 
-	if (!body.badges || !body.participantTokens) {
-		res.status(400);
-		res.send({"error": "404 Bad request"})
-	}
-	else {
-		const upload = body.upload && body.upload == true;
-		const eventId = (body.eventId && body.eventId != '') ? body.eventId : '0';
-		const participantId = (body.participantId && body.participantId != '') ? body.participantId : '0';
-		const environment = (body.environment && body.environment != '') ? body.environment : 'Stage';
+        if (!body.badges || !body.participantTokens) {
+            res.status(400).send({ error: "400 Bad Request" });
+        } else {
+            const upload = body.upload && body.upload == true;
+            const eventId = (body.eventId && body.eventId != '') ? body.eventId : '0';
+            const participantId = (body.participantId && body.participantId != '') ? body.participantId : '0';
+            const environment = (body.environment && body.environment != '') ? body.environment : 'Stage';
 
-		const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload, eventId, participantId, environment);
+            const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload, eventId, participantId, environment);
+			console.log('Result: ', result);
 
-		res.setHeader('Content-Type', 'application/json');
-		res.setHeader('Access-Control-Allow-Origin', '*');
-		res.setHeader('Access-Control-Allow-Methods', '*');
-		res.send(result);
-	}
-	console.log("finish build badge");
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', '*');
+            res.send(result);
+        }
+        console.log('\x1b[32m%s\x1b[0m', '=> Finish build badge');
+    } catch (error) {
+        console.error('Error in buildNewBadge:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
 }
 
 module.exports = {
