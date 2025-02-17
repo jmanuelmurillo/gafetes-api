@@ -1,8 +1,17 @@
 const Konva = require('konva');
 const { jsPDF } = require("jspdf");
-const { Image } = require('canvas');
+const { Image, registerFont } = require('canvas');
 const https = require('https');
 const puppeteer = require('puppeteer');
+
+registerFont('./src/fonts/arial.ttf', { family: 'Arial' });
+registerFont('./src/fonts/georgia.ttf', { family: 'Georgia' });
+registerFont('./src/fonts/verdana.ttf', { family: 'Verdana' });
+registerFont('./src/fonts/tahoma.ttf', { family: 'Tahoma' });
+registerFont('./src/fonts/trebuc.ttf', { family: 'Trebuchet MS' });
+registerFont('./src/fonts/times.ttf', { family: 'Times New Roman' });
+registerFont('./src/fonts/GARA.TTF', { family: 'Garamond' });
+registerFont('./src/fonts/cour.ttf', { family: 'Courier New' });
 
 const buildNewBadge = async (gafete, tokens, upload, eventId, participantId, environment) => {
     try {
