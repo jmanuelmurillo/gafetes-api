@@ -5,13 +5,16 @@ const https = require('https');
 const puppeteer = require('puppeteer');
 
 registerFont('./src/fonts/arial.ttf', { family: 'Arial' });
-registerFont('./src/fonts/georgia.ttf', { family: 'Georgia' });
-registerFont('./src/fonts/verdana.ttf', { family: 'Verdana' });
-registerFont('./src/fonts/tahoma.ttf', { family: 'Tahoma' });
-registerFont('./src/fonts/trebuc.ttf', { family: 'Trebuchet MS' });
-registerFont('./src/fonts/times.ttf', { family: 'Times New Roman' });
-registerFont('./src/fonts/GARA.TTF', { family: 'Garamond' });
 registerFont('./src/fonts/cour.ttf', { family: 'Courier New' });
+registerFont('./src/fonts/comic.ttf', { family: 'Comic Sans MS' });
+registerFont('./src/fonts/GARA.TTF', { family: 'Garamond' });
+registerFont('./src/fonts/georgia.ttf', { family: 'Georgia' });
+registerFont('./src/fonts/l_10646.ttf', { family: 'Lucida Sans Unicode' });
+registerFont('./src/fonts/tahoma.ttf', { family: 'Tahoma' });
+registerFont('./src/fonts/times.ttf', { family: 'Times New Roman' });
+registerFont('./src/fonts/trebuc.ttf', { family: 'Trebuchet MS' });
+registerFont('./src/fonts/verdana.ttf', { family: 'Verdana' });
+registerFont('./src/fonts/BRUSHSCI.TTF', { family: 'Brush Script MT' });
 
 const buildNewBadge = async (gafete, tokens, upload, eventId, participantId, environment) => {
     try {
