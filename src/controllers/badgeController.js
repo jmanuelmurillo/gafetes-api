@@ -20,7 +20,7 @@ const buildNewBadge = async (req, res) => {
         if (!body.badges || !body.participantTokens) {
             res.status(400).send({ error: "400 Bad Request" });
         } else {
-            var pass = Security.GetEncryptionConfiguration();
+            const pass = Security.getEncryptionConfiguration();
             const upload = body.upload && body.upload == true;
             const eventId = (body.eventId && body.eventId != '') ? body.eventId : '0';
             const participantId = (body.participantId && body.participantId != '') ? body.participantId : '0';

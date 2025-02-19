@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const badgeController = require('../controllers/badgeController');
+const BadgeController = require('../controllers/badgeController');
 
-router.get('/', badgeController.root);
+router.get('/', BadgeController.root);
 
-router.post('/', badgeController.root);
+router.post('/', BadgeController.root);
 
-router.post('/build', badgeController.buildNewBadge);
+router.post('/build', BadgeController.buildNewBadge);
 
 module.exports = router;

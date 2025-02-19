@@ -221,14 +221,13 @@ const buildImageFromHTML = async (content, attr) => {
         .content{
             overflow: hidden;
         }
-        </style>`;
+    </style>`;
 
     return new Promise(async (resolve, reject) => {
         let browser;
         try {
-            console.log('Launching Puppeteer...');
             browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
-            console.log('Puppeteer launched.');
+            console.log('\x1b[35m%s\x1b[0m', 'Puppeteer launched !!');
 
             const page = await browser.newPage();
 
@@ -240,10 +239,8 @@ const buildImageFromHTML = async (content, attr) => {
 
             const htmlString = `<html><head>${styles}</head><body><div class="content">${content}</div></body></html>`;
             await page.setContent(htmlString);
-            console.log('Content set.');
-
             const imageBuffer = await page.screenshot({ encoding: 'base64', omitBackground: true, captureBeyondViewport: false });
-            console.log('Screenshot taken.');
+            console.log('> Screenshot taken.');
 
             const srcData = imageBuffer.toString('base64');
             const base64Image = `data:image/png;base64,${srcData}`;
@@ -251,7 +248,7 @@ const buildImageFromHTML = async (content, attr) => {
             let img = new Image();
             img.onload = async () => {
                 await browser.close();
-                console.log('Image loaded & Puppeteer browser closed.');
+                console.log('> Image loaded & Puppeteer browser closed.');
                 resolve(img);
             };
             img.onerror = async (error) => {
@@ -265,7 +262,6 @@ const buildImageFromHTML = async (content, attr) => {
             console.error('Error in buildImageFromHTML:', error);
             if (browser) {
                 await browser.close();
-                console.log('Puppeteer browser closed.');
             }
             reject(error);
         }
