@@ -1,5 +1,5 @@
-const badgeService = require('../services/badgeService');
-var fs = require('fs');
+const BadgeService = require('../services/badgeService');
+const Security = require('../services/security');
 
 const root = async (req, res) => {
     try {
@@ -20,12 +20,15 @@ const buildNewBadge = async (req, res) => {
         if (!body.badges || !body.participantTokens) {
             res.status(400).send({ error: "400 Bad Request" });
         } else {
+            var pass = Security.GetEncryptionConfiguration();
             const upload = body.upload && body.upload == true;
             const eventId = (body.eventId && body.eventId != '') ? body.eventId : '0';
             const participantId = (body.participantId && body.participantId != '') ? body.participantId : '0';
             const environment = (body.environment && body.environment != '') ? body.environment : 'Stage';
+            const badgesDcpt = JSON.parse(Security.decryptData(body.badges, pass));
+            const tokensDcpt = JSON.parse(Security.decryptData(body.participantTokens, pass));
 
-            const result = await badgeService.buildNewBadge(body.badges, body.participantTokens, upload, eventId, participantId, environment);
+            const result = await BadgeService.buildNewBadge(badgesDcpt, tokensDcpt, upload, eventId, participantId, environment);
 
             res.setHeader('Content-Type', 'application/json');
             res.setHeader('Access-Control-Allow-Origin', '*');
