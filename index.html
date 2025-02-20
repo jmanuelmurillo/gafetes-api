@@ -114,7 +114,6 @@
 				"value": ""
 			}
 		];
-
 		var _badges = [
 			{
 				"Badge_id": 5,
@@ -191,7 +190,6 @@
 				"Value": ""
 			}
 		];
-
 		var _badges2 = [
 			{
 				"Bagde_identity": 11,
@@ -319,7 +317,6 @@
 
 		var pass = GetEncryptionConfiguration();
 		var _data = {
-			"cosanga":encryptData(JSON.stringify({ 'hola': 'cara de bola, niño con ácento' }), pass),
 			"badges":encryptData(JSON.stringify(_badges3), pass),
 			"participantTokens": encryptData(JSON.stringify(_tokens3), pass),
 			"upload": false,
@@ -327,12 +324,10 @@
 			"userIdentifier": "prod"
 		}
 
-		console.log(_data.cosanga, typeof decryptData(_data.cosanga, pass))
-
 		$.ajax({
 			type: "POST",
-			//url: "https://createbadges.azurewebsites.net/build",
-			url: "http://localhost:3000/build",
+			url: "https://createbadges.azurewebsites.net/build",
+			//url: "http://localhost:3000/build",
 			data: JSON.stringify(_data),
 			contentType: "application/json",
 			dataType: "json",
