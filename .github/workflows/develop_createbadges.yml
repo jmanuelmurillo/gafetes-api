@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '22.x'
 
+      - name: Clean npm cache
+        run: npm cache clean --force
+
       - name: npm install, build, and test
         run: |
           npm install
