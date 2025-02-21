@@ -21,8 +21,9 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: Clean and install dependencies
         run: |
+          rm -rf node_modules
           npm install
 
       - name: Zip artifact for deployment
