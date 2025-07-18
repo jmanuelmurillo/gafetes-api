@@ -95,14 +95,14 @@ const buildNewBadge = async (gafete, tokens, upload, eventId, participantId, env
                 var pageOrientation = pageWidth > pageHeigth ? 'l' : 'p';
 
                 if (!pdf) {
-                    pdf = new jsPDF(pageOrientation, 'px', [pageWidth, pageHeigth]);
+                    pdf = new jsPDF(pageOrientation, 'px', [pageWidth, pageHeigth], true);
                 } else {
                     pdf.addPage([pageWidth, pageHeigth], pageOrientation);
                 }
 
                 // then put image on top of texts (so texts are not visible)
                 pdf.addImage(
-                    stagePreview.toDataURL({ pixelRatio: 2 }),
+                    stagePreview.toDataURL({ format: 'png', pixelRatio: 2 }),
                     'png',
                     0,
                     0,
